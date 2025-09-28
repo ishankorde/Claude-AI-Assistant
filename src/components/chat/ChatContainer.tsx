@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { Message, ChatState } from "@/types/chat";
 import { ChatHeader } from "./ChatHeader";
 import { MessageBubble } from "./MessageBubble";
@@ -20,33 +20,32 @@ export const ChatContainer = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
+  // Always call all hooks before any conditional returns
+  const scrollToBottom = useCallback(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, []);
+
   useEffect(() => {
     // Check if API key is already configured
     setIsConfigured(isAnthropicConfigured());
   }, []);
 
-  const handleApiKeySet = (apiKey: string) => {
+  useEffect(() => {
+    if (isConfigured) {
+      scrollToBottom();
+    }
+  }, [chatState.messages, chatState.isLoading, scrollToBottom, isConfigured]);
+
+  const handleApiKeySet = useCallback((apiKey: string) => {
     initializeAnthropicClient(apiKey);
     setIsConfigured(true);
     toast({
       title: "API Key Configured",
       description: "You can now start chatting with Claude!",
     });
-  };
+  }, [toast]);
 
-  if (!isConfigured) {
-    return <ApiKeySetup onApiKeySet={handleApiKeySet} />;
-  }
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [chatState.messages, chatState.isLoading]);
-
-  const handleSendMessage = async (content: string) => {
+  const handleSendMessage = useCallback(async (content: string) => {
     const userMessage: Message = {
       id: Date.now().toString(),
       content,
@@ -98,9 +97,9 @@ export const ChatContainer = () => {
         variant: "destructive",
       });
     }
-  };
+  }, [chatState.messages, toast]);
 
-  const handleClearChat = () => {
+  const handleClearChat = useCallback(() => {
     setChatState({
       messages: [],
       isLoading: false,
@@ -111,9 +110,9 @@ export const ChatContainer = () => {
       title: "Chat cleared",
       description: "Conversation history has been cleared.",
     });
-  };
+  }, [toast]);
 
-  const handleRetry = () => {
+  const handleRetry = useCallback(() => {
     setChatState(prev => ({
       ...prev,
       error: null,
@@ -124,7 +123,13 @@ export const ChatContainer = () => {
     if (lastUserMessage) {
       handleSendMessage(lastUserMessage.content);
     }
-  };
+  }, [chatState.messages, handleSendMessage]);
+
+  // Conditional rendering after all hooks are called
+  if (!isConfigured) {
+    return <ApiKeySetup onApiKeySet={handleApiKeySet} />;
+  }
+
 
   return (
     <div className="flex flex-col h-screen bg-chat-background">
