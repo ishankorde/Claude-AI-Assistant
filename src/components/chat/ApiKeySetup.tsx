@@ -40,7 +40,7 @@ export const ApiKeySetup = ({ onApiKeySet }: ApiKeySetupProps) => {
           </div>
           <CardTitle className="text-xl">Setup Claude API</CardTitle>
           <CardDescription>
-            Enter your Anthropic API key to start chatting with Claude Sonnet
+            Enter your Anthropic API key to start chatting with Claude 3.5 Haiku
           </CardDescription>
         </CardHeader>
         

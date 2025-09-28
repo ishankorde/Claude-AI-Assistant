@@ -149,7 +149,7 @@ export const ChatContainer = () => {
               </div>
               <h2 className="text-xl font-semibold text-foreground mb-2">Welcome to Claude Chat</h2>
               <p className="text-muted-foreground">
-                Start a conversation with Claude Sonnet. Ask questions, get help with coding, writing, analysis, and more.
+                Start a conversation with Claude 3.5 Haiku. Ask questions, get help with coding, writing, analysis, and more.
               </p>
             </div>
           </div>

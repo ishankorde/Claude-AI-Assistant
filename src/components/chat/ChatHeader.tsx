@@ -14,7 +14,7 @@ export const ChatHeader = ({ onClearChat, messageCount }: ChatHeaderProps) => {
           <Bot className="h-5 w-5 text-primary" />
         </div>
         <div>
-          <h1 className="text-lg font-semibold text-foreground">Chat with Claude Sonnet</h1>
+          <h1 className="text-lg font-semibold text-foreground">Chat with Claude 3.5 Haiku</h1>
           <p className="text-sm text-muted-foreground">
             {messageCount > 0 ? `${messageCount} messages` : "Start a conversation"}
           </p>
