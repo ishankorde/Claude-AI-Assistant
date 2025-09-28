@@ -47,6 +47,16 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        chat: {
+          background: "hsl(var(--chat-background))",
+          header: "hsl(var(--chat-header))",
+          "user-message": "hsl(var(--user-message))",
+          "user-message-foreground": "hsl(var(--user-message-foreground))",
+          "ai-message": "hsl(var(--ai-message))",
+          "ai-message-foreground": "hsl(var(--ai-message-foreground))",
+          "message-border": "hsl(var(--message-border))",
+          "typing-indicator": "hsl(var(--typing-indicator))",
+        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
