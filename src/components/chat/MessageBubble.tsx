@@ -1,8 +1,9 @@
-import { Message } from "@/types/chat";
+import { Message, MessageContent, ComponentDefinition } from "@/types/chat";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { User, Bot } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ComponentRenderer } from "./ComponentRenderer";
 
 interface MessageBubbleProps {
   message: Message;
@@ -10,6 +11,77 @@ interface MessageBubbleProps {
 
 export const MessageBubble = ({ message }: MessageBubbleProps) => {
   const isUser = message.sender === 'user';
+  
+  // Helper function to render content based on type
+  const renderContent = (content: string | MessageContent[], isUser: boolean) => {
+    if (isUser) {
+      return <p className="text-sm leading-relaxed whitespace-pre-wrap">{content as string}</p>;
+    }
+
+    if (Array.isArray(content)) {
+      return (
+        <div className="space-y-4">
+          {content.map((item, index) => {
+            if (item.type === 'component') {
+              return (
+                <ComponentRenderer 
+                  key={index}
+                  component={item.data as ComponentDefinition}
+                />
+              );
+            } else if (item.type === 'text') {
+              return (
+                <div key={index} className="prose prose-sm max-w-none dark:prose-invert prose-p:my-2 prose-pre:bg-muted prose-pre:border">
+                  <ReactMarkdown 
+                    remarkPlugins={[remarkGfm]}
+                    components={{
+                      p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
+                      code: ({ children, ...props }) => (
+                        <code className="bg-muted px-1 py-0.5 rounded text-xs" {...props}>
+                          {children}
+                        </code>
+                      ),
+                      pre: ({ children }) => (
+                        <pre className="bg-muted p-2 rounded text-xs overflow-x-auto border">
+                          {children}
+                        </pre>
+                      ),
+                    }}
+                  >
+                    {item.data as string}
+                  </ReactMarkdown>
+                </div>
+              );
+            }
+            return null;
+          })}
+        </div>
+      );
+    }
+
+    return (
+      <div className="prose prose-sm max-w-none dark:prose-invert prose-p:my-2 prose-pre:bg-muted prose-pre:border">
+        <ReactMarkdown 
+          remarkPlugins={[remarkGfm]}
+          components={{
+            p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
+            code: ({ children, ...props }) => (
+              <code className="bg-muted px-1 py-0.5 rounded text-xs" {...props}>
+                {children}
+              </code>
+            ),
+            pre: ({ children }) => (
+              <pre className="bg-muted p-2 rounded text-xs overflow-x-auto border">
+                {children}
+              </pre>
+            ),
+          }}
+        >
+          {content as string}
+        </ReactMarkdown>
+      </div>
+    );
+  };
   
   return (
     <div
@@ -37,30 +109,7 @@ export const MessageBubble = ({ message }: MessageBubbleProps) => {
             ? "bg-chat-user-message text-chat-user-message-foreground border-chat-user-message/20 rounded-br-md" 
             : "bg-chat-ai-message text-chat-ai-message-foreground border-chat-message-border rounded-bl-md"
         )}>
-          {isUser ? (
-            <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
-          ) : (
-            <div className="prose prose-sm max-w-none dark:prose-invert prose-p:my-2 prose-pre:bg-muted prose-pre:border">
-              <ReactMarkdown 
-                remarkPlugins={[remarkGfm]}
-                components={{
-                  p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
-                  code: ({ children, ...props }) => (
-                    <code className="bg-muted px-1 py-0.5 rounded text-xs" {...props}>
-                      {children}
-                    </code>
-                  ),
-                  pre: ({ children }) => (
-                    <pre className="bg-muted p-2 rounded text-xs overflow-x-auto border">
-                      {children}
-                    </pre>
-                  ),
-                }}
-              >
-                {message.content}
-              </ReactMarkdown>
-            </div>
-          )}
+          {renderContent(message.content, isUser)}
         </div>
         
         <span className="text-xs text-muted-foreground px-2">

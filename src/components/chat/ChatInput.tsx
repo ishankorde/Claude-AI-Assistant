@@ -36,7 +36,12 @@ export const ChatInput = ({ onSendMessage, isLoading }: ChatInputProps) => {
             onKeyDown={handleKeyDown}
             placeholder="Type your message... (Press Enter to send, Shift+Enter for new line)"
             disabled={isLoading}
-            className="min-h-[50px] max-h-[120px] resize-none bg-background border-input focus:border-primary transition-colors"
+            className="min-h-[50px] max-h-[75vh] bg-background border-input focus:border-primary transition-colors"
+            style={{ 
+              maxHeight: '75vh',
+              resize: 'vertical',
+              minHeight: '50px'
+            }}
             aria-label="Chat message input"
           />
         </div>

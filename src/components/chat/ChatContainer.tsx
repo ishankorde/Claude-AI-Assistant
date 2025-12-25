@@ -7,7 +7,9 @@ import { ChatInput } from "./ChatInput";
 import { ErrorMessage } from "./ErrorMessage";
 import { ApiKeySetup } from "./ApiKeySetup";
 import { sendMessageToClaude, initializeAnthropicClient, isAnthropicConfigured } from "@/services/anthropic";
+import { testMCPClient } from "@/services/mcp";
 import { useToast } from "@/hooks/use-toast";
+import { parseMCPResponse } from "@/utils/responseParser";
 
 export const ChatContainer = () => {
   const [isConfigured, setIsConfigured] = useState(false);
@@ -36,13 +38,33 @@ export const ChatContainer = () => {
     }
   }, [chatState.messages, chatState.isLoading, scrollToBottom, isConfigured]);
 
-  const handleApiKeySet = useCallback((apiKey: string) => {
-    initializeAnthropicClient(apiKey);
-    setIsConfigured(true);
-    toast({
-      title: "API Key Configured",
-      description: "You can now start chatting with Claude!",
-    });
+  const handleApiKeySet = useCallback(async (apiKey: string) => {
+    try {
+      initializeAnthropicClient(apiKey);
+      setIsConfigured(true);
+      
+      // Test MCP client (don't let this block the API key setup)
+      try {
+        await testMCPClient();
+        console.log('MCP Client test successful');
+      } catch (error) {
+        console.error('MCP Client test failed:', error);
+        // Don't throw - just log the error and continue
+      }
+      
+      toast({
+        title: "API Key Configured",
+        description: "You can now start chatting with Claude!",
+      });
+    } catch (error) {
+      console.error('Error configuring API key:', error);
+      toast({
+        title: "Error",
+        description: "Failed to configure API key. Please try again.",
+        variant: "destructive",
+      });
+      throw error; // Re-throw so the form knows it failed
+    }
   }, [toast]);
 
   const handleSendMessage = useCallback(async (content: string) => {
@@ -62,16 +84,37 @@ export const ChatContainer = () => {
 
     try {
       // Prepare conversation history for Claude
-      const conversationHistory = chatState.messages.map(msg => ({
-        role: msg.sender === 'user' ? 'user' as const : 'assistant' as const,
-        content: msg.content
-      }));
+      const conversationHistory = chatState.messages.map(msg => {
+        let content: string;
+        
+        if (typeof msg.content === 'string') {
+          content = msg.content;
+        } else {
+          // For structured content, only include text parts, skip components
+          const textParts = msg.content
+            .filter(item => item.type === 'text')
+            .map(item => item.data as string);
+          content = textParts.join(' ');
+        }
+        
+        return {
+          role: msg.sender === 'user' ? 'user' as const : 'assistant' as const,
+          content: content || 'Component rendered' // Fallback for component-only messages
+        };
+      });
 
+      console.log('🔧 Sending to Claude with conversation history:', conversationHistory);
+      
       const response = await sendMessageToClaude(content, conversationHistory);
+      
+      console.log('🔧 Claude response received:', response.substring(0, 200) + '...');
+      
+      // Parse the response to detect MCP components and format accordingly
+      const parsedContent = parseMCPResponse(response);
       
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
-        content: response,
+        content: parsedContent,
         sender: 'assistant',
         timestamp: new Date(),
       };
@@ -120,7 +163,7 @@ export const ChatContainer = () => {
     
     // Retry the last user message if it exists
     const lastUserMessage = [...chatState.messages].reverse().find(msg => msg.sender === 'user');
-    if (lastUserMessage) {
+    if (lastUserMessage && typeof lastUserMessage.content === 'string') {
       handleSendMessage(lastUserMessage.content);
     }
   }, [chatState.messages, handleSendMessage]);
@@ -148,9 +191,30 @@ export const ChatContainer = () => {
                 </svg>
               </div>
               <h2 className="text-xl font-semibold text-foreground mb-2">Welcome to Claude Chat</h2>
-              <p className="text-muted-foreground">
+              <p className="text-muted-foreground mb-4">
                 Start a conversation with Claude 3.5 Haiku. Ask questions, get help with coding, writing, analysis, and more.
               </p>
+              <div className="bg-primary/5 border border-primary/20 rounded-lg p-4">
+                <h3 className="font-medium text-primary mb-2">🔧 SaaS Management Tools Available</h3>
+                <p className="text-sm text-muted-foreground mb-2">
+                  Claude can help you manage your SaaS applications and users:
+                </p>
+                <ul className="text-sm text-muted-foreground space-y-1">
+                  <li>• List and search users</li>
+                  <li>• Manage app assignments</li>
+                  <li>• Create new users</li>
+                  <li>• View user permissions</li>
+                </ul>
+                <p className="text-xs text-muted-foreground mt-2">
+                  Try: "Show me all users" or "Assign john@example.com to Slack"
+                </p>
+                <button
+                  onClick={() => handleSendMessage("Show me all users")}
+                  className="mt-3 px-3 py-1 bg-primary text-primary-foreground text-xs rounded hover:bg-primary/90 transition-colors"
+                >
+                  Test User Table
+                </button>
+              </div>
             </div>
           </div>
         ) : (

@@ -32,9 +32,27 @@ cd <YOUR_PROJECT_NAME>
 # Step 3: Install the necessary dependencies.
 npm i
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Step 4: Set up environment variables
+# Copy the example environment file and fill in your credentials
+cp .env.example .env
+# Edit .env and add your:
+# - VITE_ANTHROPIC_API_KEY (from https://console.anthropic.com/)
+# - VITE_SUPABASE_URL (from your Supabase project settings)
+# - VITE_SUPABASE_SERVICE_ROLE_KEY (from your Supabase project settings)
+
+# Step 5: Start the development server with auto-reloading and an instant preview.
 npm run dev
 ```
+
+## 🔐 Environment Variables
+
+This project requires the following environment variables to be set in a `.env` file:
+
+- `VITE_ANTHROPIC_API_KEY`: Your Anthropic API key (get it from [console.anthropic.com](https://console.anthropic.com/))
+- `VITE_SUPABASE_URL`: Your Supabase project URL (from your Supabase project settings)
+- `VITE_SUPABASE_SERVICE_ROLE_KEY`: Your Supabase service role key (from your Supabase project settings)
+
+**Important**: Never commit your `.env` file to version control! The `.env` file is already in `.gitignore`.
 
 **Edit a file directly in GitHub**
 

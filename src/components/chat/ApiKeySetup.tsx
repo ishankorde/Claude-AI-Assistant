@@ -16,13 +16,22 @@ export const ApiKeySetup = ({ onApiKeySet }: ApiKeySetupProps) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!apiKey.trim()) return;
+    
+    if (!apiKey.trim()) {
+      return;
+    }
 
     setIsValidating(true);
     
     // Simple validation - check if it looks like an Anthropic API key
     if (apiKey.startsWith('sk-ant-')) {
-      onApiKeySet(apiKey.trim());
+      try {
+        await onApiKeySet(apiKey.trim());
+        setIsValidating(false);
+      } catch (error) {
+        console.error('Error setting API key:', error);
+        setIsValidating(false);
+      }
     } else {
       setTimeout(() => {
         setIsValidating(false);

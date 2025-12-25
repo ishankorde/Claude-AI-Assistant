@@ -38,6 +38,9 @@ All colors MUST be HSL.
 
     --radius: 0.75rem;
 
+    --table-header: 142 50% 92%;
+    --table-header-foreground: 142 71% 25%;
+
     /* Chat-specific colors */
     --chat-background: 0 0% 98%;
     --chat-header: 0 0% 100%;
@@ -104,6 +107,9 @@ All colors MUST be HSL.
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 213 94% 68%;
+
+    --table-header: 142 50% 20%;
+    --table-header-foreground: 142 50% 85%;
 
     /* Chat-specific colors for dark mode */
     --chat-background: 217.2 32.6% 17.5%;
