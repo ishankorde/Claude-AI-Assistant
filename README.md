@@ -1,8 +1,14 @@
-# Welcome to your Lovable project
+# Claude AI assistant
 
 ## Project info
 
-**URL**: https://lovable.dev/projects/ea865b72-3ca2-4242-bbb9-8dd24cbabe8b
+This is a custom built AI assistant running on Claude 3.5 Haiku. The AI assistant can be used to interact with the <app name> via the app's MCP server. This prototype shows what an interactive UI experience could look like when UI elements and components are pushed by the MCP server and rendered by the AI assistant.
+
+**Try it!**
+After forking the repo and setting up the environment along with your Anthropic API Key, you can ask the the chatbot to show a list of user. The chatbot will render a interactive table UI. Currently only the list_users API is configured to pass UI (JSON) to the AI Asssistant. Other APIs (e.g. Show apps) will work but the results will be displayed in text.
+
+Note: You will also need to fork the repo <link> which is the SaaS app used for Users and Apps list.
+
 
 ## How can I edit this code?
 
