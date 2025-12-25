@@ -5,6 +5,12 @@
 
 This AI assistant runs on Claude 3.5 Haiku. The AI assistant is mainly used to interact with the [User assignment app](https://github.com/ishankorde/Users-assignment-app) via the app's MCP server. This prototype demonstrates an interactive MCP UI experience with UI components that are pushed by the MCP server and rendered by the AI assistant.
 
+**Demo**
+<br>
+[![Watch the video](https://img.youtube.com/vi/APOPm01BVrk/hqdefault.jpg)](https://www.youtube.com/embed/ECuDJCveJR0)
+<br>
+<br>
+
 **Try it!**
 
 Fork the repo and set up the environment along with your Anthropic API Key. Ask the AI assistant to give a list of user. The AI assistant will render a interactive Table UI component.
