@@ -11,7 +11,8 @@ Demo video showing the interactive table UI rendered by the AI assistant based o
 - 00:00 to 00:13 (SaaS app components)
 - 00:13 to 00:39 (List applications query showing text response)
 - 00:40 to 01:08 (List users query with interactive table UI)
-- 01:09 to 01:24 (Single user query with filtered table UI)
+- 01:09 to 01:24 (Single user query with filtered table UI)<br>
+
 [Demo video](https://www.youtube.com/watch?v=ECuDJCveJR0)
 <br>
 <br>
