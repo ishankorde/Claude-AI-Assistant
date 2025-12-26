@@ -9,10 +9,10 @@ This AI assistant runs on Claude 3.5 Haiku. The AI assistant is mainly used to i
 
 Demo video showing the interactive table UI rendered by the AI assistant based on the MCP server response.
 
-00:00 to 00:13 - SaaS app components
-00:13 to 00:39 - List applications query showing text response
-00:40 to 01:08 - List users query with interactive table UI
-01:09 to 01:24 - Single user query with filtered table UI
+- 00:00 to 00:13 (SaaS app components)
+- 00:13 to 00:39 (List applications query showing text response)
+- 00:40 to 01:08 (List users query with interactive table UI)
+- 01:09 to 01:24 (Single user query with filtered table UI)
 <br>
 [![Watch the video](https://github.com/ishankorde/Claude-AI-Assistant/blob/main/MCP-UI.png)](https://www.youtube.com/embed/ECuDJCveJR0)
 <br>
