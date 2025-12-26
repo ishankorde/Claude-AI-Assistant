@@ -7,7 +7,7 @@ This AI assistant runs on Claude 3.5 Haiku. The AI assistant is mainly used to i
 
 **Demo**
 <br>
-[![Watch the video](https://img.youtube.com/vi/APOPm01BVrk/hqdefault.jpg)](https://www.youtube.com/embed/ECuDJCveJR0)
+[![Watch the video](https://github.com/ishankorde/Claude-AI-Assistant/blob/main/MCP-UI.png)](https://www.youtube.com/embed/ECuDJCveJR0)
 <br>
 <br>
 
