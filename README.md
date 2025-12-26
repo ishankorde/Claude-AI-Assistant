@@ -13,7 +13,7 @@ Demo video showing the interactive table UI rendered by the AI assistant based o
 - 00:40 to 01:08 (List users query with interactive table UI)
 - 01:09 to 01:24 (Single user query with filtered table UI)<br>
 
-[Demo video](https://www.youtube.com/watch?v=ECuDJCveJR0)
+[<img src=https://github.com/ishankorde/Claude-AI-Assistant/blob/main/MCP-UI.png/>](https://www.youtube.com/watch?v=ECuDJCveJR0)
 <br>
 <br>
 
@@ -35,5 +35,28 @@ This project is built with:
 ## How does this work?
 
 **The complete flow**
+1. User sends message → "Show me all users"
+   - Claude is called
+2. Claude decides to use a tool
+   - Claude recognizes the need for user data and calls list_users
+3. MCP server queries Supabase
+   - mcp.ts queries the database
+   - Maps raw data to component format
+   - Creates component JSON with styling configuration
+4. Detects and returns JSON
+   - anthropic.ts detects component JSON in the tool result
+   - Bypasses Claude's text generation to return raw JSON
+5. Parser extracts component
+   - responseParser.ts finds JSON in the response
+6. Table component is rendered in the chat window
+<br>
+
+**Architecture principles**
+<br>
+- Separation of concerns: MCP = data + styling, Frontend = rendering
+- 100% MCP control: Every CSS class, feature toggle, and column definition comes from MCP
+- Type safety: TypeScript interfaces ensure correct structure
+
+
 
 
